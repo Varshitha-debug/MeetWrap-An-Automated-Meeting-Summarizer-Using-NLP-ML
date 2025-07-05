@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetWrap - AI Meeting Transcription & Summary</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-microphone-alt"></i>
+                <h1>MeetWrap</h1>
+            </div>
+            <p class="tagline">Transform your meeting recordings into actionable insights</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-card">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Upload Your Meeting Recording</h3>
+                        <p>Drag and drop your audio file here or click to browse</p>
+                        <input type="file" id="audioFile" accept="audio/*" hidden>
+                        <button class="upload-btn" id="uploadBtn">
+                            <i class="fas fa-folder-open"></i>
+                            Choose File
+                        </button>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo" style="display: none;">
+                        <div class="file-details">
+                            <i class="fas fa-file-audio"></i>
+                            <div class="file-text">
+                                <span class="file-name" id="fileName"></span>
+                                <span class="file-size" id="fileSize"></span>
+                            </div>
+                            <button class="remove-file" id="removeFile">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="model-selection">
+                        <h4>Select AI Models</h4>
+                        <div class="model-options">
+                            <div class="model-group">
+                                <label>Transcription Model:</label>
+                                <select id="transcriptionModel">
+                                    <option value="whisper">Whisper (Base)</option>
+                                    <option value="whisper-large">Whisper Large</option>
+                                    <option value="whisper-medium">Whisper Medium</option>
+                                </select>
+                            </div>
+                            <div class="model-group">
+                                <label>Summary Model:</label>
+                                <select id="summaryModel">
+                                    <option value="bart">BART CNN</option>
+                                    <option value="samsum">BART Samsum</option>
+                                    <option value="karthick">Karthick Model</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="process-btn" id="processBtn" disabled>
+                        <i class="fas fa-magic"></i>
+                        Process Recording
+                    </button>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="processing-section" id="processingSection" style="display: none;">
+                <div class="processing-card">
+                    <div class="processing-animation">
+                        <div class="spinner"></div>
+                    </div>
+                    <h3>Processing Your Recording</h3>
+                    <p>Our AI models are working on your meeting...</p>
+                    <div class="progress-steps">
+                        <div class="step active" id="step1">
+                            <i class="fas fa-upload"></i>
+                            <span>Uploading</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <i class="fas fa-microphone"></i>
+                            <span>Transcribing</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <i class="fas fa-brain"></i>
+                            <span>Summarizing</span>
+                        </div>
+                        <div class="step" id="step4">
+                            <i class="fas fa-check"></i>
+                            <span>Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>Meeting Analysis Complete</h2>
+                    <div class="results-actions">
+                        <button class="action-btn" id="downloadBtn">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </button>
+                        <button class="action-btn" id="shareBtn">
+                            <i class="fas fa-share"></i>
+                            Share
+                        </button>
+                        <button class="action-btn secondary" id="newAnalysisBtn">
+                            <i class="fas fa-plus"></i>
+                            New Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results-content">
+                    <div class="result-tabs">
+                        <button class="tab-btn active" data-tab="transcript">
+                            <i class="fas fa-file-alt"></i>
+                            Transcript
+                        </button>
+                        <button class="tab-btn" data-tab="summary">
+                            <i class="fas fa-list-ul"></i>
+                            Summary
+                        </button>
+                        <button class="tab-btn" data-tab="insights">
+                            <i class="fas fa-lightbulb"></i>
+                            Key Insights
+                        </button>
+                    </div>
+
+                    <div class="tab-content">
+                        <div class="tab-panel active" id="transcript">
+                            <div class="content-header">
+                                <h3>Full Transcript</h3>
+                                <div class="content-actions">
+                                    <button class="copy-btn" data-copy="transcript">
+                                        <i class="fas fa-copy"></i>
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="transcript-content" id="transcriptContent">
+                                <!-- Transcript will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="summary">
+                            <div class="content-header">
+                                <h3>Meeting Summary</h3>
+                                <div class="content-actions">
+                                    <button class="copy-btn" data-copy="summary">
+                                        <i class="fas fa-copy"></i>
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="summary-content" id="summaryContent">
+                                <!-- Summary will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="insights">
+                            <div class="content-header">
+                                <h3>Key Insights & Action Items</h3>
+                                <div class="content-actions">
+                                    <button class="copy-btn" data-copy="insights">
+                                        <i class="fas fa-copy"></i>
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="insights-content" id="insightsContent">
+                                <!-- Insights will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 MeetWrap. Powered by AI.</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
